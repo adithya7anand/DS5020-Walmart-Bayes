@@ -119,6 +119,7 @@ DS5020-Walmart-Bayes/
 ├── DS5020_Walmart_Bayes_Complete.ipynb
 ├── DS5020_Walmart_Step_by_Step_Cells.md
 ├── DS5020_Walmart_Answer_Sheet.csv
+├── DS5020_Walmart_Detailed_Answer_Sheet.md
 ├── Walmart.csv
 ├── note.txt
 ├── requirements.txt
@@ -130,6 +131,7 @@ DS5020-Walmart-Bayes/
 - **Step-by-step Markdown:** Code snippets and explanations for following the workflow.
 - **Dataset:** Original Walmart weekly-sales CSV.
 - **Answer sheet:** Consolidated probabilities and performance results.
+- **Detailed answer sheet:** Every task worked through with its formula, substituted counts, verification, and interpretation (`DS5020_Walmart_Detailed_Answer_Sheet.md`).
 - **Stakeholder note:** Five-sentence summary of operational findings.
 - **Requirements:** Python packages needed to reproduce the workflow.
 
