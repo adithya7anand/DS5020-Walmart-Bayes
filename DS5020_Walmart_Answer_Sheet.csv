@@ -1,0 +1,12 @@
+Task,Your value
+P1,6435 rows; 45 stores; 143 weeks; 450 holiday store-weeks
+P2,P(S)=0.126496; P(H)=0.069930; P(Q)=0.125874; P(C)=0.153691; P(F)=0.470707; P(J)=0.469619; P(G)=0.488889
+P3,P(S∩H)=0.018959; P(S∩Q)=0.051748; P(H∩Q)=0.027972; P(S∩C)=0.028749
+B1,P(S|H)=0.271111; P(S|Hᶜ)=0.115622
+B2,P(H|S) by Bayes=0.149877; counting=0.149877
+B3,Highest P(S|group): Thanksgiving; largest P(group|S): No holiday
+B4,P(S|Q)=0.411111; P(Q|S)=0.409091
+B5,"Holiday only: precision=0.271111, recall=0.149877; November–December: precision=0.411111, recall=0.409091"
+B6,Twice as common: 0.465204; Half as common: 0.147789
+N3,Profile a=0.793850558; Profile b=0.030069265
+N6,"Never strong: accuracy=0.868217, precision=0.000000, recall=0.000000; Holiday only: accuracy=0.845478, precision=0.255556, recall=0.090196; Naive Bayes (0.5): accuracy=0.868217, precision=0.000000, recall=0.000000"
