@@ -1,11 +1,11 @@
-# DS5020 Walmart Bayes — Jupyter copy/paste cells
+# DS 5020 — Walmart Sales: Computational Walkthrough
 
-Place Walmart.csv in the same folder as your notebook. Run each code cell in order.
+The code sections correspond to the analysis in `DS5020_Walmart_Bayes_Complete.ipynb`.
 
 # DS 5020 – Mini-Project 02: Will This Be a Strong Sales Week?
-**Complete worked solution | Bayes’ theorem & Naive Bayes on Walmart.csv**
+**Bayes’ theorem and Naive Bayes analysis on Walmart sales data**
 
-Place `Walmart.csv` in the same folder as this notebook, then select **Kernel → Restart & Run All**. Run the cells in order. Parts P/B use the full-dataset store average. Part N uses the 2010–2011 **training-only** average to avoid leakage.
+The analysis uses `Walmart.csv` stored alongside the notebook. Parts P/B use each store’s full-dataset average; Part N uses **training-only store averages from 2010–2011** to avoid leakage into the 2012 test period.
 
 **Definitions (R1):** a store-week is one row in the dataset (R2). The seven events are:
 
@@ -19,7 +19,7 @@ Place `Walmart.csv` in the same folder as this notebook, then select **Kernel �
 |J|Unemployment ≥ 8%|
 |G|Store average weekly sales ≥ $1,000,000|
 
-**R5:** Check probabilities by a complement, by counts, by summing to one, or by a separate formula. **R4:** Use store numbers only, no identities/addresses.
+**Verification (R5):** Probabilities are checked by complements, counts, sums to one, or independent formulas. **Presentation (R4):** Store identifiers only; no store addresses or personal identifiers.
 
 ## Warm-up W1–W7 (by hand, using the 20-row table on p. 3)
 The table has 20 store-weeks: 6 strong and 14 not strong. There are 4 holiday weeks, 5 November–December weeks, 3 strong holiday weeks, and 4 strong November–December weeks.
@@ -69,8 +69,6 @@ from sklearn.naive_bayes import CategoricalNB
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
 
 CSV_PATH = Path("Walmart.csv")
-if not CSV_PATH.exists():
-    CSV_PATH = Path("/mnt/data/Walmart.csv")  # available in this ChatGPT workspace
 
 df = pd.read_csv(CSV_PATH)
 df["Date"] = pd.to_datetime(df["Date"], dayfirst=True)
@@ -527,9 +525,3 @@ answer_sheet.to_csv("DS5020_Walmart_Answer_Sheet.csv", index=False)
 print("Saved: DS5020_Walmart_Answer_Sheet.csv and note.txt")
 ```
 
-## Submission checklist
-
-- Keep this notebook and `Walmart.csv` together, then **Kernel → Restart & Run All**.
-- Make sure the **Warm-up W1–W7** Markdown section is included. If the instructor literally requires paper, copy the hand calculations to paper.
-- Include/export the completed **answer sheet** above and the **five-sentence `note.txt`**.
-- All plots/tables and note use store numbers only. No addresses or managers' names.
