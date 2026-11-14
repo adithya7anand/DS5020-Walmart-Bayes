@@ -56,7 +56,7 @@ For a week with **H=0, Q=0**:
 
 **Interpretation:** Naive Bayes approximately matches the nonholiday/nonseason case; for holiday+season it predicts ~96.55% versus 100% in the small sample. These are not necessarily identical because the independence assumption is approximate.
 
-## Cell 1 — Imports and P1: load/check the data
+## IMPORTS AND DATA LOADING (P1)
 
 Import the libraries, read the file, parse the date as day–month–year, and check the dataset against the assignment.
 
@@ -87,7 +87,7 @@ assert df["Holiday_Flag"].sum() == 450
 assert df.isna().sum().sum() == 0
 ```
 
-## Cell 2 — Define all seven events (R1)
+## DEFINE THE SEVEN EVENTS (R1)
 
 Create a reusable function. For P/B use every store’s overall mean; later, N1 calls this function with training-only means.
 
@@ -112,7 +112,7 @@ FEATURES = ["H", "Q", "C", "F", "J", "G"]
 display(ev[["Store", "Date", "Weekly_Sales"] + EVENTS].head())
 ```
 
-## Cell 3 — P2: event probabilities with complement checks
+## EVENT PROBABILITIES (P2)
 
 For each event, calculate count/6435 and independently confirm P(E) + P(not E) = 1.
 
@@ -131,7 +131,7 @@ display(p2.round(6))
 assert np.allclose(p2["Sum (check=1)"], 1.0)
 ```
 
-## Cell 4 — P3: joint probabilities
+## JOINT PROBABILITIES (P3)
 
 For each pair, count rows satisfying both events; check against the mean of the Boolean intersection.
 
@@ -149,7 +149,7 @@ p3 = pd.DataFrame(p3_rows)
 display(p3.round(6))
 ```
 
-## Cell 5 — B1: strong sales conditional on holiday/nonholiday
+## HOLIDAY CONDITIONAL PROBABILITIES (B1)
 
 Compute P(S|H) and P(S|Hᶜ) using counts, check with group means, and compare.
 
@@ -167,7 +167,7 @@ print(f"P(S|Hᶜ) = {strong_nonh}/{n_nonh} = {p_s_given_nonh:.6f} ({100*p_s_give
 print(f"A strong week is {p_s_given_h/p_s_given_nonh:.2f} times as likely on a holiday week.")
 ```
 
-## Cell 6 — B2: Bayes’ theorem and counting check
+## BAYES THEOREM (B2)
 
 Use P(H|S) = P(S|H)P(H)/P(S), then compute the same probability directly among strong rows.
 
@@ -181,7 +181,7 @@ print(f"P(H|S) by counting = {int((ev['H'] & ev['S']).sum())}/{int(ev['S'].sum()
 assert np.isclose(p_h_given_s_bayes, p_h_given_s_count)
 ```
 
-## Cell 7 — B3: total probability across five holiday groups
+## LAW OF TOTAL PROBABILITY (B3)
 
 Assign the specific holiday dates listed in the PDF; calculate P(group), P(S|group), contribution, and P(group|S).
 
@@ -220,7 +220,7 @@ assert np.isclose(b3["P(group)"].sum(), 1)
 assert np.isclose(b3["P(group|S)"].sum(), 1)
 ```
 
-## Cell 8 — B4: November–December conditionals
+## NOVEMBER–DECEMBER PROBABILITIES (B4)
 
 The denominators differ: P(S|Q) conditions on November–December; P(Q|S) conditions on strong weeks.
 
@@ -235,7 +235,7 @@ print(f"P(Q|S) = {n_s_and_q}/{int(ev['S'].sum())} = {p_q_given_s:.6f}")
 print("They differ because they use different reference groups (different denominators).")
 ```
 
-## Cell 9 — B5: holiday vs November–December staffing rules
+## COMPARE STAFFING RULES (B5)
 
 Compute each rule’s precision with the reverse Bayes formula; check precision and recall by counting.
 
@@ -261,7 +261,7 @@ display(b5.round(6))
 print("A larger recall means the rule misses fewer truly strong weeks.")
 ```
 
-## Cell 10 — B6: hypothetical base rates
+## BASE RATE ANALYSIS (B6)
 
 Hold the holiday likelihoods P(H|S) and P(H|Sᶜ) fixed, but change the prior P(S).
 
@@ -281,7 +281,7 @@ display(b6.round(6))
 assert 2 * p_s < 1
 ```
 
-## Cell 11 — B7: independence checks
+## INDEPENDENCE CHECKS (B7)
 
 Compare P(S ∩ E) against P(S)P(E); a nonzero difference means dependence in this dataset.
 
@@ -301,7 +301,7 @@ print("Largest absolute departures from independence:")
 display(b7.sort_values("Abs. difference", ascending=False)[["Pair", "Difference"]].round(6))
 ```
 
-## Cell 12 — N1: time-based train/test split (prevent leakage)
+## TRAIN AND TEST SPLIT (N1)
 
 Train on 2010–2011 (4,500 store-weeks), test on 2012 (1,935). Recompute store averages using only train weeks.
 
@@ -318,7 +318,7 @@ assert train["Date"].max() < test["Date"].min()
 assert train["Store"].nunique() == test["Store"].nunique() == 45
 ```
 
-## Cell 13 — N2: priors and six binary likelihood tables
+## PRIORS AND LIKELIHOOD TABLES (N2)
 
 First show frequencies estimated by counting. Also show add-one (Laplace) smoothed probabilities (alpha=1) to match CategoricalNB in N5.
 
@@ -354,7 +354,7 @@ for feature in FEATURES:
         assert np.isclose(sub[column].sum(), 1)
 ```
 
-## Cell 14 — N3: manual Naive Bayes scores and normalization
+## MANUAL NAIVE BAYES CALCULATIONS (N3)
 
 Profile (a): holiday, Nov–Dec, cold, cheap fuel, low unemployment, large store. Profile (b) is the opposite. Use the smoothed conditional probabilities from N2.
 
@@ -388,7 +388,7 @@ posterior_a = manual_nb_posterior(profile_a, "a")
 posterior_b = manual_nb_posterior(profile_b, "b")
 ```
 
-## Cell 15 — N4: check conditional independence of H and Q
+## CONDITIONAL INDEPENDENCE CHECK (N4)
 
 Test whether P(H ∩ Q|S) equals P(H|S) × P(Q|S) in the training data.
 
@@ -402,7 +402,7 @@ print(f"Difference = {p_hq_given_s - p_h_s_times_p_q_s:.6f}")
 print("H and Q are not independent: Thanksgiving and Christmas holidays fall in Nov–Dec.")
 ```
 
-## Cell 16 — N5: fit CategoricalNB and verify N3
+## SCIKIT-LEARN NAIVE BAYES (N5)
 
 Use exactly the same six binary features and alpha=1 Laplace smoothing as in N3.
 
@@ -424,7 +424,7 @@ assert np.allclose([posterior_a, posterior_b], nb_posteriors, atol=1e-12)
 print("The manual calculations match scikit-learn.")
 ```
 
-## Cell 17 — N6: confusion matrices and baseline comparisons
+## MODEL EVALUATION (N6)
 
 Evaluate on 2012 only: never strong, holiday-only rule, and Naive Bayes with the default 0.5 decision threshold.
 
@@ -456,7 +456,7 @@ print("\n2012 has no Thanksgiving or Christmas records (data ends in October).")
 print("This limits evaluation of holiday-season effects learned from 2010–2011.")
 ```
 
-## Cell 18 — N7: threshold stretch task
+## CLASSIFICATION THRESHOLDS (N7)
 
 Predict strong when P(S|x) is strictly greater than t; compare four thresholds.
 
@@ -474,7 +474,7 @@ display(n7.round(6))
 print("Lower thresholds usually flag more weeks; precision and recall need not both improve.")
 ```
 
-## Cell 19 — J1: five-sentence note to Maria (note.txt)
+## FIVE-SENTENCE STAKEHOLDER NOTE (J1)
 
 Build the note using measured values. Print and save it as note.txt, as required by the project.
 
@@ -498,7 +498,7 @@ Path("note.txt").write_text(note_text + "\n", encoding="utf-8")
 assert len(sentences) == 5
 ```
 
-## Cell 20 — Section 7: filled-in answer sheet
+## COMPLETED ANSWER SHEET (SECTION 7)
 
 Collect the exact requested values into one table and export a CSV. B7 and N7 detailed tables appear above.
 
